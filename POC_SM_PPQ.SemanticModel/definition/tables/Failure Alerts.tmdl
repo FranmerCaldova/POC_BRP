@@ -1,0 +1,171 @@
+/// Direct Lake source: POC_fail_rate_alerts. Current-run measures isolate published facts.
+table 'Failure Alerts'
+
+	/// Supported 365-day exploratory alerts in the validated publication.
+	measure 'Alert Count' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    COUNTROWS('Failure Alerts'),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: #,##0
+
+	/// One alert cohort only; never summed between cohorts.
+	measure 'Alert Risk' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Alerts'[Risk]),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: 0.00%
+
+	/// One alert cohort only; never summed between cohorts.
+	measure 'Alert Lower Bound' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Alerts'[Lower Bound]),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: 0.00%
+
+	/// One alert cohort only; never summed between cohorts.
+	measure 'Alert Upper Bound' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Alerts'[Upper Bound]),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: 0.00%
+
+	/// One alert cohort only; never summed between cohorts.
+	measure 'Alert At Risk' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Alerts'[At Risk]),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: #,##0
+
+	/// One alert cohort only; never summed between cohorts.
+	measure 'Alert Threshold' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Alerts'[Threshold]),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: 0.00%
+
+	/// One alert cohort only; never summed between cohorts.
+	measure 'Alert Population' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Alerts'[Population]),
+			    TREATAS({ _run }, 'Failure Alerts'[Run Id])
+			)
+		formatString: #,##0
+
+	column 'Product Line'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: product_line
+
+	column 'Model Year'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: model_year
+
+	column 'Event Type'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: event_type
+
+	column 'Run Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column Axis
+		dataType: string
+		summarizeBy: none
+		sourceColumn: axis
+
+	column Horizon
+		dataType: double
+		summarizeBy: none
+		sourceColumn: horizon
+
+	column Population
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: population
+
+	column Events
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: events
+
+	column 'At Risk'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: at_risk
+
+	column Risk
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: failure_probability
+
+	column 'Lower Bound'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: ci_lower
+
+	column 'Upper Bound'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: ci_upper
+
+	column 'Model Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model_status
+
+	column 'Observed Fraction'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: observed_claim_fraction
+
+	column Threshold
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: alert_threshold
+
+	partition 'Failure Alerts' = entity
+		mode: directLake
+		source
+			entityName: POC_fail_rate_alerts
+			expressionSource: 'Direct Lake Gold'
+

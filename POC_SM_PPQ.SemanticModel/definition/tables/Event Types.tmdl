@@ -1,0 +1,14 @@
+/// Direct Lake source: POC_event_types. Current-run measures isolate published facts.
+table 'Event Types'
+
+	column 'Event Type'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: event_type
+
+	partition 'Event Types' = entity
+		mode: directLake
+		source
+			entityName: POC_event_types
+			expressionSource: 'Direct Lake Gold'
+

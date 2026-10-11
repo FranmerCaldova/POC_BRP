@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "MLModel",
+    "displayName": "POC_ML_VEHICLE_USAGE"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "99aa9103-354c-a5b7-454a-4cfdea36734a"
+  }
+}

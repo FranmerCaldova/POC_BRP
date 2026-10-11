@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "POC_NB_02_Survival"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "73656c8d-fc95-b153-4b87-473e387c9ed2"
+  }
+}

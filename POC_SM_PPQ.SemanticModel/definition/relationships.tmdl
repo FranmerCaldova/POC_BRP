@@ -1,0 +1,60 @@
+relationship POC_Failure_Curves_Products
+	fromColumn: 'Failure Curves'.'Product Line'
+	toColumn: Products.'Product Line'
+
+relationship POC_Failure_Curves_Model_Years
+	fromColumn: 'Failure Curves'.'Model Year'
+	toColumn: 'Model Years'.'Model Year'
+
+relationship POC_Failure_Curves_Event_Types
+	fromColumn: 'Failure Curves'.'Event Type'
+	toColumn: 'Event Types'.'Event Type'
+
+relationship POC_Actual_Claim_Rates_Products
+	fromColumn: 'Actual Claim Rates'.'Product Line'
+	toColumn: Products.'Product Line'
+
+relationship POC_Actual_Claim_Rates_Model_Years
+	fromColumn: 'Actual Claim Rates'.'Model Year'
+	toColumn: 'Model Years'.'Model Year'
+
+relationship POC_Actual_Claim_Rates_Event_Types
+	fromColumn: 'Actual Claim Rates'.'Event Type'
+	toColumn: 'Event Types'.'Event Type'
+
+relationship POC_Failure_Alerts_Products
+	fromColumn: 'Failure Alerts'.'Product Line'
+	toColumn: Products.'Product Line'
+
+relationship POC_Failure_Alerts_Model_Years
+	fromColumn: 'Failure Alerts'.'Model Year'
+	toColumn: 'Model Years'.'Model Year'
+
+relationship POC_Failure_Alerts_Event_Types
+	fromColumn: 'Failure Alerts'.'Event Type'
+	toColumn: 'Event Types'.'Event Type'
+
+relationship POC_Partition_Metrics_Products
+	fromColumn: 'Partition Metrics'.'Product Line'
+	toColumn: Products.'Product Line'
+
+relationship POC_Partition_Metrics_Model_Years
+	fromColumn: 'Partition Metrics'.'Model Year'
+	toColumn: 'Model Years'.'Model Year'
+
+relationship POC_Partition_Metrics_Event_Types
+	fromColumn: 'Partition Metrics'.'Event Type'
+	toColumn: 'Event Types'.'Event Type'
+
+relationship POC_Usage_Predictions_Products
+	fromColumn: 'Usage Predictions'.'Product Line'
+	toColumn: Products.'Product Line'
+
+relationship POC_Usage_Predictions_Model_Years
+	fromColumn: 'Usage Predictions'.'Model Year'
+	toColumn: 'Model Years'.'Model Year'
+
+relationship POC_Quality_Calendar
+	fromColumn: 'Quality Checks'.'Check Date'
+	toColumn: Calendar.Date
+

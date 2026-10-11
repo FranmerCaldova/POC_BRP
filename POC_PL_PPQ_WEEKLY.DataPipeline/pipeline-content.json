@@ -1,0 +1,240 @@
+{
+  "properties": {
+    "description": "Read-only Bronze to validated Gold. Snapshot dates are explicit; weekly schedule remains disabled. DQ failure stops publication.",
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "fb9d30de-b805-830f-4b20-55752d265597",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@concat('pipeline_', pipeline().RunId)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "as_of_date": {
+              "value": {
+                "value": "@pipeline().parameters.as_of_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "alert_threshold": {
+              "value": {
+                "value": "@pipeline().parameters.alert_threshold",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:40:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "POC_Silver",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "73656c8d-fc95-b153-4b87-473e387c9ed2",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@concat('pipeline_', pipeline().RunId)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "as_of_date": {
+              "value": {
+                "value": "@pipeline().parameters.as_of_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "alert_threshold": {
+              "value": {
+                "value": "@pipeline().parameters.alert_threshold",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:40:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "POC_Survival",
+        "dependsOn": [
+          {
+            "activity": "POC_Silver",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "e8a29771-acc7-b9f0-4f20-52ad8ade6620",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@concat('pipeline_', pipeline().RunId)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "as_of_date": {
+              "value": {
+                "value": "@pipeline().parameters.as_of_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "alert_threshold": {
+              "value": {
+                "value": "@pipeline().parameters.alert_threshold",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:40:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "POC_Vehicle_Usage",
+        "dependsOn": [
+          {
+            "activity": "POC_Survival",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "252b5ce0-9d94-849a-4231-ad8a38f6bb0b",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@concat('pipeline_', pipeline().RunId)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "as_of_date": {
+              "value": {
+                "value": "@pipeline().parameters.as_of_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "alert_threshold": {
+              "value": {
+                "value": "@pipeline().parameters.alert_threshold",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:40:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "POC_DQ",
+        "dependsOn": [
+          {
+            "activity": "POC_Vehicle_Usage",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "ea3de196-8251-bae4-4fc0-1d8310eb7985",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "run_id": {
+              "value": {
+                "value": "@concat('pipeline_', pipeline().RunId)",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "as_of_date": {
+              "value": {
+                "value": "@pipeline().parameters.as_of_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "alert_threshold": {
+              "value": {
+                "value": "@pipeline().parameters.alert_threshold",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.00:40:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "POC_Publish_Gold",
+        "dependsOn": [
+          {
+            "activity": "POC_DQ",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "as_of_date": {
+        "type": "string",
+        "defaultValue": "2026-08-28"
+      },
+      "alert_threshold": {
+        "type": "string",
+        "defaultValue": "0.10"
+      }
+    }
+  }
+}

@@ -1,0 +1,169 @@
+/// Direct Lake source: POC_fail_rate_probabilities. Current-run measures isolate published facts.
+table 'Failure Curves'
+
+	/// One cohort/event/axis/horizon only. BLANK for ambiguous or unsupported risk.
+	measure 'Failure Probability' =
+			IF(
+			    HASONEVALUE('Products'[Product Line])
+			        && HASONEVALUE('Event Types'[Event Type])
+			        && HASONEVALUE('Failure Curves'[Model Year])
+			        && HASONEVALUE('Failure Curves'[Axis])
+			        && HASONEVALUE('Failure Curves'[Horizon]),
+			    VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Curves'[Risk]),
+			    TREATAS({ _run }, 'Failure Curves'[Run Id])
+			)
+			)
+		formatString: 0.00%
+
+	/// Kaplan-Meier cumulative failure probability by vehicle age.
+	measure 'Age Failure Probability' = CALCULATE([Failure Probability], KEEPFILTERS('Failure Curves'[Axis] = "age_days"))
+		formatString: 0.00%
+
+	/// Kaplan-Meier cumulative failure probability by observed mileage.
+	measure 'Mileage Failure Probability' = CALCULATE([Failure Probability], KEEPFILTERS('Failure Curves'[Axis] = "odometer_km"))
+		formatString: 0.00%
+
+	/// One supported cohort/axis/horizon only.
+	measure 'Curve Lower Bound' =
+			IF(NOT(ISBLANK([Failure Probability])),
+			    VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Curves'[Lower Bound]),
+			    TREATAS({ _run }, 'Failure Curves'[Run Id])
+			)
+			)
+		formatString: 0.00%
+
+	/// One supported cohort/axis/horizon only.
+	measure 'Curve Upper Bound' =
+			IF(NOT(ISBLANK([Failure Probability])),
+			    VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Curves'[Upper Bound]),
+			    TREATAS({ _run }, 'Failure Curves'[Run Id])
+			)
+			)
+		formatString: 0.00%
+
+	/// One supported cohort/axis/horizon only.
+	measure 'Curve At Risk' =
+			IF(NOT(ISBLANK([Failure Probability])),
+			    VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Curves'[At Risk]),
+			    TREATAS({ _run }, 'Failure Curves'[Run Id])
+			)
+			)
+		formatString: #,##0
+
+	/// One supported cohort/axis/horizon only.
+	measure 'Curve Population' =
+			IF(NOT(ISBLANK([Failure Probability])),
+			    VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SELECTEDVALUE('Failure Curves'[Population]),
+			    TREATAS({ _run }, 'Failure Curves'[Run Id])
+			)
+			)
+		formatString: #,##0
+
+	column 'Product Line'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: product_line
+
+	column 'Model Year'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: model_year
+
+	column 'Event Type'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: event_type
+
+	column 'Run Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column Axis
+		dataType: string
+		summarizeBy: none
+		sourceColumn: axis
+
+	column Horizon
+		dataType: double
+		summarizeBy: none
+		sourceColumn: horizon
+
+	column Population
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: population
+
+	column Events
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: events
+
+	column 'At Risk'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: at_risk
+
+	column Risk
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: failure_probability
+
+	column 'Lower Bound'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: ci_lower
+
+	column 'Upper Bound'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: ci_upper
+
+	column 'Model Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model_status
+
+	column 'Observed Fraction'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: observed_claim_fraction
+
+	partition 'Failure Curves' = entity
+		mode: directLake
+		source
+			entityName: POC_fail_rate_probabilities
+			expressionSource: 'Direct Lake Gold'
+

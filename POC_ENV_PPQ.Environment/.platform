@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Environment",
+    "displayName": "POC_ENV_PPQ",
+    "description": "Isolated PPQ lifelines Runtime 2.0 validation environment; does not change workspace defaults."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "63afde11-ede9-a8ac-4a54-40df3049bfaa"
+  }
+}

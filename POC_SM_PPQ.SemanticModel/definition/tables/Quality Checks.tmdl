@@ -1,0 +1,96 @@
+/// Direct Lake source: POC_dq_results. Current-run measures isolate published facts.
+table 'Quality Checks'
+
+	/// Latest persisted DQ attempt, including failed candidates.
+	measure 'Latest Audit Time' = CALCULATE(MAX('Quality Checks'[Checked At]), REMOVEFILTERS('Quality Checks'), REMOVEFILTERS('Calendar'))
+		formatString: yyyy-MM-dd HH:mm:ss
+
+	/// Attempt identity is independent of the validated publication pointer.
+	measure 'Latest Audit Attempt' =
+			VAR _latest = [Latest Audit Time]
+			RETURN CALCULATE(SELECTEDVALUE('Quality Checks'[Attempt Id]), REMOVEFILTERS('Quality Checks'), REMOVEFILTERS('Calendar'), 'Quality Checks'[Checked At] = _latest)
+		formatString: @
+
+	/// Latest attempt result at one check grain; earlier attempts return BLANK.
+	measure 'Audit Result' =
+			VAR _latest = [Latest Audit Time]
+			RETURN CALCULATE(SELECTEDVALUE('Quality Checks'[Status]), KEEPFILTERS('Quality Checks'[Checked At] = _latest))
+		formatString: @
+
+	/// Observed check value for the latest attempt, with no aggregation.
+	measure 'Audit Actual' =
+			VAR _latest = [Latest Audit Time]
+			RETURN CALCULATE(SELECTEDVALUE('Quality Checks'[Actual]), KEEPFILTERS('Quality Checks'[Checked At] = _latest))
+		formatString: 0.000
+
+	/// Recorded threshold; see code for two-sided/range checks.
+	measure 'Audit Threshold' =
+			VAR _latest = [Latest Audit Time]
+			RETURN CALCULATE(SELECTEDVALUE('Quality Checks'[Threshold]), KEEPFILTERS('Quality Checks'[Checked At] = _latest))
+		formatString: 0.000
+
+	/// Does not mistake a prior valid report for a healthy latest execution.
+	measure 'DQ Health' =
+			VAR _latest = [Latest Audit Time]
+			VAR _blocked = CALCULATE(COUNTROWS('Quality Checks'), REMOVEFILTERS('Quality Checks'), REMOVEFILTERS('Calendar'), 'Quality Checks'[Checked At] = _latest, 'Quality Checks'[Status] = "failed", 'Quality Checks'[Severity] = "blocking")
+			RETURN IF(ISBLANK(_latest), "No DQ evidence", IF(_blocked > 0, "BLOCKED - previous publication retained", "No blocking failures in latest DQ attempt"))
+		formatString: @
+
+	column 'Attempt Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column Check
+		dataType: string
+		summarizeBy: none
+		sourceColumn: check_name
+
+	column Status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: status
+
+	column Severity
+		dataType: string
+		summarizeBy: none
+		sourceColumn: severity
+
+	column Actual
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: actual
+
+	column Threshold
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: threshold
+
+	column 'Checked At'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: checked_at
+
+	column 'Check Date'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-MM-dd
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: checked_date
+
+	partition 'Quality Checks' = entity
+		mode: directLake
+		source
+			entityName: POC_dq_results
+			expressionSource: 'Direct Lake Gold'
+

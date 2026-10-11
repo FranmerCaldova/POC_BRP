@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "POC_RPT_PPQ",
+    "description": "PPQ engineering PoC: curves, exploratory alerts and independent DQ audit."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b69576d7-71e2-9303-4ca2-06e44f225601"
+  }
+}

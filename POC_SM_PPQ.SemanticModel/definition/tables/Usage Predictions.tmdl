@@ -1,0 +1,55 @@
+/// Direct Lake source: POC_vehicle_usage_ml_predictions. Current-run measures isolate published facts.
+table 'Usage Predictions'
+
+	/// One latest bounded observation per predicted vehicle.
+	measure 'Predicted Vehicles' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    COUNTROWS('Usage Predictions'),
+			    TREATAS({ _run }, 'Usage Predictions'[Run Id])
+			)
+		formatString: #,##0
+
+	/// Mean of vehicle-level mileage predictions; not a survival duration.
+	measure 'Mean Predicted Kilometres' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    AVERAGE('Usage Predictions'[Predicted Kilometres]),
+			    TREATAS({ _run }, 'Usage Predictions'[Run Id])
+			)
+		formatString: #,##0
+
+	column 'Product Line'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: product_line
+
+	column 'Model Year'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: model_year
+
+	column 'Run Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column 'Predicted Kilometres'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: predicted_km
+
+	partition 'Usage Predictions' = entity
+		mode: directLake
+		source
+			entityName: POC_vehicle_usage_ml_predictions
+			expressionSource: 'Direct Lake Gold'
+

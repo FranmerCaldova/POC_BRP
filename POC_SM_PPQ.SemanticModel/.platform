@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "POC_SM_PPQ",
+    "description": "PPQ exploratory reporting; explicit current publication and independent DQ audit."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1a27748e-687c-a587-4574-579326d87380"
+  }
+}

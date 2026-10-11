@@ -1,0 +1,97 @@
+/// Direct Lake source: POC_run_manifest. Current-run measures isolate published facts.
+table 'Published Run'
+
+	/// Identity of the single validated publication; not the latest attempted run.
+	measure 'Published Run' = SELECTEDVALUE('Published Run'[Run Id])
+		formatString: @
+
+	/// Explicit administrative snapshot date, not wall-clock execution date.
+	measure 'Source Snapshot' = SELECTEDVALUE('Published Run'[Snapshot])
+		formatString: @
+
+	/// Publisher compute before final marker and pointer writes.
+	measure 'Publication Compute Seconds' = SELECTEDVALUE('Published Run'[Publication Seconds])
+		formatString: #,##0.0
+
+	/// Vehicle-disjoint temporal holdout mean absolute error in kilometres.
+	measure 'Usage MAE' = SELECTEDVALUE('Published Run'[Usage Error])
+		formatString: #,##0
+
+	/// Median training-target baseline error on the same holdout.
+	measure 'Baseline MAE' = SELECTEDVALUE('Published Run'[Baseline Error])
+		formatString: #,##0
+
+	/// Root mean squared error in kilometres on the temporal holdout.
+	measure 'Usage RMSE' = SELECTEDVALUE('Published Run'[Usage Root Mean Squared Error])
+		formatString: #,##0
+
+	/// Version of the evaluated Fabric usage model.
+	measure 'Registered Model Version' = SELECTEDVALUE('Published Run'[Model Version])
+		formatString: @
+
+	/// Actual survival-run threshold, including publications with no alerts.
+	measure 'Configured Alert Threshold' = SELECTEDVALUE('Published Run'[Configured Threshold])
+		formatString: 0.0%
+
+	/// Holdout improvement against the median baseline; not production validation.
+	measure 'Usage MAE Improvement' =
+			VAR _baseline = [Baseline MAE]
+			RETURN DIVIDE(_baseline - [Usage MAE], _baseline)
+		formatString: 0.0%
+
+	column 'Run Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column Snapshot
+		dataType: string
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+	column 'Publication Seconds'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: publication_seconds
+
+	column 'Usage Error'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: usage_mae_km
+
+	column 'Baseline Error'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: usage_baseline_mae_km
+
+	column 'Usage Root Mean Squared Error'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: usage_rmse_km
+
+	column 'Model Version'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: usage_model_version
+
+	column 'Configured Threshold'
+		dataType: double
+		summarizeBy: none
+		sourceColumn: alert_threshold
+
+	partition 'Published Run' = entity
+		mode: directLake
+		source
+			entityName: POC_run_manifest
+			expressionSource: 'Direct Lake Gold'
+

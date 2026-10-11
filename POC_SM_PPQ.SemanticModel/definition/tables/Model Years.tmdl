@@ -1,0 +1,14 @@
+/// Direct Lake source: POC_model_years. Current-run measures isolate published facts.
+table 'Model Years'
+
+	column 'Model Year'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: model_year
+
+	partition 'Model Years' = entity
+		mode: directLake
+		source
+			entityName: POC_model_years
+			expressionSource: 'Direct Lake Gold'
+

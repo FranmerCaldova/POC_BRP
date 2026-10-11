@@ -1,0 +1,14 @@
+/// Direct Lake source: POC_products. Current-run measures isolate published facts.
+table Products
+
+	column 'Product Line'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: product_line
+
+	partition Products = entity
+		mode: directLake
+		source
+			entityName: POC_products
+			expressionSource: 'Direct Lake Gold'
+

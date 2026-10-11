@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "POC_NB_00_Runtime_Check",
+    "description": "Driver and worker lifelines verification followed by read-only complete vehicle profiling."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "789bf6ff-c731-bb1e-4b2b-1781393d5fa6"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "POC_NB_90_DQ_Guard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "214e1995-46f4-a13a-4329-54f7b76771b2"
+  }
+}

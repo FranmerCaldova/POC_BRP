@@ -1,0 +1,6 @@
+expression 'Direct Lake Gold' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/cf8e7010-b147-4129-9b1b-e9d49f595be2/95f39639-d268-486d-818e-ca16976ad318", [HierarchicalNavigation=true])
+		in
+		    Source
+

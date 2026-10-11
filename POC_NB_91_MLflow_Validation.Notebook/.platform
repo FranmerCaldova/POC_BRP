@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "POC_NB_91_MLflow_Validation"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "24325506-c322-a243-4b59-dfcc985277c7"
+  }
+}

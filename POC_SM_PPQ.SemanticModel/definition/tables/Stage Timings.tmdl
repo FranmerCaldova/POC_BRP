@@ -1,0 +1,37 @@
+/// Direct Lake source: POC_pipeline_stage_metrics. Current-run measures isolate published facts.
+table 'Stage Timings'
+
+	/// Measured notebook compute only, excluding startup and scheduler waits.
+	measure 'Stage Compute Seconds' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    SUM('Stage Timings'[Compute Seconds]),
+			    TREATAS({ _run }, 'Stage Timings'[Run Id])
+			)
+		formatString: #,##0.0
+
+	column 'Run Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column Stage
+		dataType: string
+		summarizeBy: none
+		sourceColumn: stage
+
+	column 'Compute Seconds'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: elapsed_seconds
+
+	partition 'Stage Timings' = entity
+		mode: directLake
+		source
+			entityName: POC_pipeline_stage_metrics
+			expressionSource: 'Direct Lake Gold'
+

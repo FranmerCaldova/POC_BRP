@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "POC_LH_BRP_SILVER",
+    "description": "PPQ POC conformed data and candidate outputs. Existing Bronze is read-only."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d6bc145d-02c6-a02a-4faa-406ddb44b2e5"
+  }
+}

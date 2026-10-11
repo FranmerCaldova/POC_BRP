@@ -1,0 +1,32 @@
+/// Direct Lake source: POC_calendar. Current-run measures isolate published facts.
+table Calendar
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: yyyy-MM-dd
+		dataCategory: Time
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: calendar_year
+
+	column Month
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: calendar_month
+
+	column Day
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: calendar_day
+
+	partition Calendar = entity
+		mode: directLake
+		source
+			entityName: POC_calendar
+			expressionSource: 'Direct Lake Gold'
+

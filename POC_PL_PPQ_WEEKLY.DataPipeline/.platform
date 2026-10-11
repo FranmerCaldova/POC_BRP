@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "POC_PL_PPQ_WEEKLY",
+    "description": "PPQ weekly chain; schedule disabled for demo."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d9b42845-c8fc-85a6-4965-b1a087ed60ab"
+  }
+}

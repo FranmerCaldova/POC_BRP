@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "MLExperiment",
+    "displayName": "POC_EXP_PPQ_USAGE",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bd16fc0a-e97b-ad17-4d03-e17fb5e231d6"
+  }
+}

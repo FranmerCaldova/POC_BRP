@@ -1,0 +1,57 @@
+/// Direct Lake source: POC_partition_metrics. Current-run measures isolate published facts.
+table 'Partition Metrics'
+
+	/// Fitted product/year/event/axis groups; not distinct global models.
+	measure 'Modelled Partitions' =
+			VAR _run = [Published Run]
+			RETURN CALCULATE(
+			    COUNTROWS('Partition Metrics'),
+			    'Partition Metrics'[Model Status] <> "insufficient_support",
+			    TREATAS({ _run }, 'Partition Metrics'[Run Id])
+			)
+		formatString: #,##0
+
+	column 'Product Line'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: product_line
+
+	column 'Model Year'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: model_year
+
+	column 'Event Type'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: event_type
+
+	column 'Run Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column Axis
+		dataType: string
+		summarizeBy: none
+		sourceColumn: axis
+
+	column 'Model Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model_status
+
+	partition 'Partition Metrics' = entity
+		mode: directLake
+		source
+			entityName: POC_partition_metrics
+			expressionSource: 'Direct Lake Gold'
+
